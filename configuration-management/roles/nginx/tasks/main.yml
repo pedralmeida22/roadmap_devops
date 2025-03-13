@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for nginx
+- name: Apt update
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install nginx
+  ansible.builtin.apt:
+    state: present
+    name: nginx
+
+- name: Configure nginx
+  ansible.builtin.copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: "664"
+    owner: root
+    group: root
+  notify: Restart nginx

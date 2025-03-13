@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for ssh
+- name: Set authorized key
+  ansible.posix.authorized_key:
+    user: nap
+    key: "{{ lookup('file', '/Users/almeida-mba/.ssh/id_ed25519.pub') }}"

@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for app
+- name: Create /var/www/html directory
+  ansible.builtin.file:
+    path: /var/www/html
+    state: directory
+    mode: "775"
+
+- name: Upload website tarball
+  ansible.builtin.copy:
+    src: /Users/almeida-mba/Documents/roadmap/roadmap_devops/configuration-management/website.zip
+    dest: /tmp/website.zip
+    mode: "664"
+  tags: v1
+
+# - name: Download website archive from github
+#   ansible.builtin.get_url:
+#     url: https://github.com/pedralmeida22/roadmap_devops/website.zip
+#     dest: /tmp/website.zip
+#     mode: "664"
+
+- name: Unarchive website tarball
+  ansible.builtin.unarchive:
+    src: /tmp/website.zip
+    dest: /var/www/html
+    remote_src: true

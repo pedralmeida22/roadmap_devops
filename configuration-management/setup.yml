@@ -3,6 +3,9 @@
   hosts: all
   remote_user: nap
   become: true
+  gather_facts: false
+  vars_files:
+    - vault/secrets.yml
   roles:
     - role: base
       tags: base

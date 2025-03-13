@@ -41,5 +41,6 @@ ansible-playbook setup.yml -i inventory/hosts.yml --ask-pass --ask-become-pass
 
 Run app role "v2" where the website content is downloaded from github:
 ````
-ansible-playbook setup.yml --skip-tags v1 -i inventory/hosts.yml --ask-pass --ask-become-pass
+ansible-playbook setup.yml --skip-tags v1 -i inventory/hosts.yml --ask-pass --ask-become-pass --ask-vault-pass
 ````
+Note: It is necessary to use `--ask-vault-pass` to open the ansible vault which stores the github access token.

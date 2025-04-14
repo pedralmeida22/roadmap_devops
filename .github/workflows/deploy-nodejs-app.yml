@@ -32,3 +32,6 @@ jobs:
           inventory: inventory/inventory.yml
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           vault_password: ${{ secrets.VAULT_PASSWORD }}
+          configuration: |
+            [defaults]
+            host_key_checking: false

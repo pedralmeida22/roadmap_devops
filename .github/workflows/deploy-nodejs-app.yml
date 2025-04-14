@@ -6,7 +6,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "nodejs-service-deployment/app"
+      - "nodejs-service-deployment/app/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,14 +24,23 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo -e "Host *\n  StrictHostKeyChecking=no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
+          chmod 600 ~/.ssh/id_rsa
+
       - name: Run playbook
-        uses: dawidd6/action-ansible-playbook@v3
-        with:
-          directory: ./nodejs-service-deployment/ansible
-          playbook: playbook.yml
-          inventory: inventory/inventory.yml
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          vault_password: ${{ secrets.VAULT_PASSWORD }}
-          configuration: |
-            [defaults]
-            host_key_checking: false
+        working-directory: ./nodejs-service-deployment
+        env:
+          env:
+          VAULT_PASS: ${{ secrets.VAULT_PASSWORD }}
+        run: |
+          echo "$VAULT_PASS" > vault_pass.txt
+          ansible-playbook playbook.yml -i inventory/inventory.yml --tags "app" --vault-password-file vaul_pass.txt

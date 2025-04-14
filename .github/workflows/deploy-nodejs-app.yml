@@ -39,7 +39,6 @@ jobs:
       - name: Run playbook
         working-directory: ./nodejs-service-deployment/ansible
         env:
-          env:
           VAULT_PASS: ${{ secrets.VAULT_PASSWORD }}
         run: |
           echo "$VAULT_PASS" > ./nodejs-service-deployment/ansible/vault_pass.txt

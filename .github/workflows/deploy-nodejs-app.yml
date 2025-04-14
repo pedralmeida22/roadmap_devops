@@ -1,0 +1,33 @@
+name: Deploy nodejs application
+run-name: ${github.actor} deploying app...
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+    paths:
+      - "nodejs-service-deployment/app"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Install python3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v3
+        with:
+          directory: ./ansible
+          playbook: playbook.yml
+          key: ${secrets.SSH_PRIVATE_KEY}
+          vault_password: ${secrets.VAULT_PASSWORD}

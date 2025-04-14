@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for server
+
+- name: Apt update
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install packages
+  ansible.builtin.apt:
+    name:
+      - nano
+      - git
+      - curl
+      - nodejs
+      - npm
+    state: present

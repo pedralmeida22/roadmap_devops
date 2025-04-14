@@ -2,7 +2,14 @@
 ---
 # tasks file for app
 
-# clone repo
+- name: Create app directory
+  ansible.builtin.file:
+    path: /home/ubuntu/app/
+    state: directory
+    mode: "775"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
 - name: Get file metadata from GitHub API
   ansible.builtin.uri:
     url: https://api.github.com/repos/pedralmeida22/roadmap_devops/contents/nodejs-service-deployment/app
@@ -10,12 +17,33 @@
       Authorization: "Bearer {{ app_gh_token }}"
   register: file_metadata
 
-- name: Download the file from the actual download URL
+- name: Download the each file from the app directory
   ansible.builtin.get_url:
-    url: "{{ file_metadata.json.download_url }}"
-    dest: /home/ubuntu/
+    url: "{{ loop_item.download_url }}"
+    dest: /home/ubuntu/app/
     mode: "664"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  loop: "{{ file_metadata.json }}"
+  loop_control:
+    loop_var: loop_item
 
 # install dependencies
+- name: Install dependencies
+  community.general.npm:
+    path: /home/ubuntu/app
 
-# build, run and start app
+- name: Add systemd service file
+  ansible.builtin.copy:
+    src: node_systemd.service
+    dest: /etc/systemd/system/
+    mode: "664"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Enable and start systemd service
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    state: restarted
+    enabled: true
+    name: node_systemd

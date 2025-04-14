@@ -42,4 +42,5 @@ jobs:
 
       - name: Run playbook
         working-directory: ./nodejs-service-deployment/ansible/
+        run: |
           ansible-playbook playbook.yml -i inventory/inventory.yml --tags "app" --vault-password-file vaul_pass.txt

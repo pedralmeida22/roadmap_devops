@@ -37,7 +37,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
       - name: Run playbook
-        working-directory: ./nodejs-service-deployment
+        working-directory: ./nodejs-service-deployment/ansible
         env:
           env:
           VAULT_PASS: ${{ secrets.VAULT_PASSWORD }}

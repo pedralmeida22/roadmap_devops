@@ -36,10 +36,10 @@ jobs:
           echo -e "Host *\n  StrictHostKeyChecking=no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Run playbook
-        working-directory: ./nodejs-service-deployment/ansible
-        env:
-          VAULT_PASS: ${{ secrets.VAULT_PASSWORD }}
+      - name: Create vaul_pass.txt file
         run: |
-          echo "$VAULT_PASS" > ./nodejs-service-deployment/ansible/vault_pass.txt
+          echo ${{ secrets.VAULT_PASSWORD }} > ./nodejs-service-deployment/ansible/vault_pass.txt
+
+      - name: Run playbook
+        working-directory: ./nodejs-service-deployment/ansible/
           ansible-playbook playbook.yml -i inventory/inventory.yml --tags "app" --vault-password-file vaul_pass.txt

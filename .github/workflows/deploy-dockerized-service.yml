@@ -72,6 +72,7 @@ jobs:
       - name: Deploy service in remote machine
         run: |
           ssh ec2-user@${{ secrets.EC2_IP }} << EOF
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USER }} -password-stdin
             docker pull pedralmeida22/roadmap_devops:latest
             docker stop nodejs-service || true
             docker rm nodejs-service || true

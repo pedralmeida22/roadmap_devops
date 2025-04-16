@@ -12,7 +12,7 @@ terraform apply
 
 Do not forget to destroy the infrastrucute when no longer needed:
 ```
-terraform init
+terraform destroy
 ```
 
 ### Configure server - Ansible

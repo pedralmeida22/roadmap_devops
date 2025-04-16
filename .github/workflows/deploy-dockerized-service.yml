@@ -66,6 +66,7 @@ jobs:
               sudo systemctl enable docker.service
               sudo systemctl start docker.service
               echo "Docker installed."
+            fi
           EOF
 
       - name: Deploy service in remote machine

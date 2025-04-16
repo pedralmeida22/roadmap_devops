@@ -31,6 +31,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
+          context: ./dockerized-service/
           file: ./dockerized-service/Dockerfile
           push: true
           tags: pedralmeida22/roadmap_devops:latest

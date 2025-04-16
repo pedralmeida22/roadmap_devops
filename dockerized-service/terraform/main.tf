@@ -22,8 +22,8 @@ resource "aws_vpc_security_group_ingress_rule" "tr_sg_ingress_http" {
   security_group_id = aws_security_group.tr_sg.id
   description = "Allow http traffic"
   ip_protocol = "tcp"
-  from_port = 80
-  to_port = 80
+  from_port = 3000
+  to_port = 3000
   cidr_ipv4 = "0.0.0.0/0"
 }
 

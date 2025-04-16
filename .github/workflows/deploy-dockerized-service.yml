@@ -1,4 +1,4 @@
-name: Deploy nodejs application
+name: Deploy dockerized nodejs application
 run-name: ${{ github.actor }} deploying app...
 
 on:

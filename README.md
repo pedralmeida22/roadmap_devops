@@ -1,4 +1,2 @@
 # roadmap_devops
-Roadmap.sh DevOps projects
-
-Github page: https://pedralmeida22.github.io/roadmap_devops/
+This repository contains my solutions for some of the [Roadmap.sh](https://roadmap.sh/devops/projects) DevOps projects.

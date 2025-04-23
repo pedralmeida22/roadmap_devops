@@ -49,4 +49,32 @@ Finally, connect to the private server:
 ssh private-server
 ```
 
-TODO - automate setup with Terraform
+### Terraform - automated deployment
+
+This Terraform script automates the steps described above in AWS. It creates a VPC, a public and private subnets in a single Availability Zone, a Internet Gateway for the public subnet, the route tables, the servers with the correct security groups for each one, and a SSH key pair.
+
+Configure variables in the `terraform.tfvars` file.
+
+```
+terraform init
+terraform plan
+terraform apply
+```
+
+After running the Terraform script, configure SSH with the 'setup_ssh.sh' script:
+```
+bash setup_ssh.sh
+```
+
+Make sure the line `Include ~/.ssh/bastion_config` is at the top of your `~/.ssh/config` otherwise it will not work.
+
+Connect to the servers:
+```
+ssh bastion
+ssh private-server
+```
+
+Finally, destroy the infrastructure:
+```
+terraform destroy
+```

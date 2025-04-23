@@ -1,0 +1,6 @@
+vpc_cidr_block    = "10.0.0.0/24"
+az                = "us-east-1a"
+private_subnet    = "10.0.0.0/28"
+public_subnet     = "10.0.0.16/28"
+ec2_instance_type = "t2.micro"
+ami_id            = "ami-0e449927258d45bc4"

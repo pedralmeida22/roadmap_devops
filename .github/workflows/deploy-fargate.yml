@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  ECR_REPOSITORY: "fargate_repo"
+  ECR_REPOSITORY: "roadmap/fargate_repo"
 
 jobs:
   deploy:

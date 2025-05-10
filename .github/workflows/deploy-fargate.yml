@@ -45,7 +45,8 @@ jobs:
 
       - name: Replace account id in task definition
         run: |
-          sed -i "s|<EXECUTION_ROLE_ARN>|arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ecsTaskExecutionRole|" ./dockerized-service/fargate-deployment/ecs-task-definition.json
+          sed -i "s|<ACCOUNT_ID>|arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ecsTaskExecutionRole|" ./dockerized-service/fargate-deployment/ecs-task-definition.json
+      
       - name: Render ECS task definition
         id: render-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1

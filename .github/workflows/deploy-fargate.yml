@@ -4,6 +4,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  ECR_REPOSITORY: "fargate_repo"
+
 jobs:
   deploy:
     name: Deploy to ECS
@@ -29,26 +32,34 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build the Docker image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/roadmap/fargate_repo:latest ./dockerized-service/
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./dockerized-service/
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Push Docker image to Amazon ECR
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/roadmap/fargate_repo:latest
+          docker push ${{ steps.build-image.outputs.image }}
 
+      - name: Replace account id in task definition
+        run: |
+          sed "s|<EXECUTION_ROLE_ARN>|arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ecsTaskExecutionRole" ./dockerized-service/fargate-deployment/ecs-task-definition.json
       - name: Render ECS task definition
-        id: render-task-def
+        id: render-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ./dockerized-service/fargate-deployment/ecs-task-definition.json
           container-name: nodejs-app
-          image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/roadmap/fargate_repo:latest
-          environment-variables: |
-            ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Debug rendered task definition
+        run: cat ${{ steps.render-task-definition.outputs.task-definition }}
 
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           cluster: ${{ secrets.ECS_CLUSTER_NAME }}
           service: ${{ secrets.ECS_SERVICE_NAME }}
-          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          task-definition: ${{ steps.render-task-definition.outputs.task-definition }}

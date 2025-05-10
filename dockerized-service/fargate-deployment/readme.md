@@ -60,7 +60,7 @@ terraform apply -var-file=”variables.tfvars”
 ```
 Note: Provisioning the Application Load Balancer takes around 5 minutes.
 
-5. View your app:
+5. View your app (Terraform outputs the ALB DNS):
 ```
 curl http://<alb-dns>:80
 ```

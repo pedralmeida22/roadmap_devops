@@ -42,7 +42,7 @@ terraform init
 terraform apply
 ```
 
-Do not forget to destroy the infrastrucute when no longer needed:
+Do not forget to destroy the infrastructure when no longer needed:
 ```
 terraform destroy
 ```

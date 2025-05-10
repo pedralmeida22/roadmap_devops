@@ -21,7 +21,7 @@ app.use('/secret', basicAuth({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send('Hello, world!');
+    res.send('Hello, world! Fargate');
 });
 
 app.get('/secret', (req, res) => {

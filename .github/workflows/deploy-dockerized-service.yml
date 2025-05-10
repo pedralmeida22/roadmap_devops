@@ -3,10 +3,10 @@ run-name: ${{ github.actor }} deploying app...
 
 on:
   # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
-    paths:
-      - "dockerized-service/app/**"
+  # push:
+  #   branches: ["main"]
+  #   paths:
+  #     - "dockerized-service/app/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

@@ -29,7 +29,7 @@ However, Terraform requires a Task Definition when creating an ECS Service which
 1. Create ECR repository:
 ```
 aws ecr create-repository \
-    --repository-name fargate_repo \
+    --repository-name roadmap/fargate_repo \
     --image-tag-mutability MUTABLE
 ```
 Save the `repositoryUri` attribute, it will be needed.
@@ -74,8 +74,18 @@ When no longer needed, destroy the infrastructure:
 terraform destroy
 ```
 
-Delete ECR repository:
+Delete images in the ECR repository:
+```
+aws ecr list-images \
+     --repository-name roadmap/fargate_repo
+
+aws ecr batch-delete-image \
+     --repository-name roadmap/fargate_repo \
+     --image-ids imageDigest=<image_digest>
+```
+
+Delete ECR repository (repository must be empty):
 ```
 aws ecr delete-repository \
-    --repository-name fargate_repo
+    --repository-name roadmap/fargate_repo
 ```

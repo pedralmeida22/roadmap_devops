@@ -1,0 +1,5 @@
+all:
+  hosts:
+    server:
+      ansible_host: 54.74.240.214
+      ansible_ssh_private_key_file: "../terraform/tr_rsa_key.pem"

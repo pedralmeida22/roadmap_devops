@@ -1,0 +1,23 @@
+services:
+  todo-api:
+    image: pedralmeida/todos_api:latest
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo_db
+    networks:
+      - todos_lan
+
+  mongo_db:
+    image: mongo:latest
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - todos_lan
+
+networks:
+  todos_lan:
+    driver: bridge
+
+volumes:
+  mongo-data:

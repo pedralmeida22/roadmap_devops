@@ -67,10 +67,15 @@
         source: pull
         name: pedralmeida/todos_api:latest
 
-    - name: Pull mongo docker image from registry
+    - name: Pull mongo docker image
       community.docker.docker_image:
         source: pull
         name: mongo:latest
+
+    - name: Pull mongo docker image
+      community.docker.docker_image:
+        source: pull
+        name: nginx:latest
 
     - name: Stop old containers
       community.docker.docker_compose_v2:

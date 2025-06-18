@@ -1,0 +1,44 @@
+name: Deploy multi container application
+run-name: ${{ github.actor }} deploying app...
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Install python3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install latest Ansible
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+
+      - name: Check Ansible version
+        run: |
+          ansible --version
+
+      - name: Create vault_pass.txt file
+        run: |
+          echo ${{ secrets.VAULT_PASSWORD }} > ./multi-container-app/ansible/vault_pass.txt
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo -e "Host *\n  StrictHostKeyChecking=no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Run playbook
+        working-directory: ./multi-container-app/ansible/
+        run: |
+          ansible-playbook playbook.yml --skip-tags "docker" -i inventory/inv.yml -e "ansible_ssh_private_key_file=~/.ssh/id_rsa" --vault-password-file vault_pass.txt

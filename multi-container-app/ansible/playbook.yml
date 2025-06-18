@@ -19,7 +19,7 @@
         group: "{{ ansible_user }}"
         mode: "775"
 
-    - name: Get file metadata from GitHub API
+    - name: Get file metadata from GitHub API - docker compose
       ansible.builtin.uri:
         url: https://api.github.com/repos/pedralmeida22/roadmap_devops/contents/multi-container-app/docker-compose.yml
         headers:
@@ -30,6 +30,29 @@
       ansible.builtin.get_url:
         url: "{{ file_metadata.json.download_url }}"
         dest: /home/ec2-user/app
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "664"
+
+    - name: Create nginx directory
+      ansible.builtin.file:
+        path: /home/ec2-user/app/nginx
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "775"
+
+    - name: Get file metadata from GitHub API - nginx configuration file
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/pedralmeida22/roadmap_devops/contents/multi-container-app/nginx/default.conf
+        headers:
+          Authorization: "Bearer {{ gh_token }}"
+      register: file_metadata
+
+    - name: Download nginx configuration file download URL
+      ansible.builtin.get_url:
+        url: "{{ file_metadata.json.download_url }}"
+        dest: /home/ec2-user/app/nginx
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
         mode: "664"

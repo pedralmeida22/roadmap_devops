@@ -9,7 +9,7 @@
   ansible.builtin.dnf:
     name: docker
     state: present
-  notify: Restart docker
+  notify: Start docker
 
 - name: Ensure CLI plugin directory exists
   ansible.builtin.file:

@@ -15,6 +15,17 @@ services:
     networks:
       - todos_lan
 
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - todo-api
+    networks:
+      - todos_lan
+
 networks:
   todos_lan:
     driver: bridge

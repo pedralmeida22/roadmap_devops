@@ -28,8 +28,9 @@ jobs:
           ansible --version
 
       - name: Create vault_pass.txt file
+        working-directory: ./multi-container-app/ansible/
         run: |
-          echo "${{ secrets.VAULT_PASSWORD }}" > ./multi-container-app/ansible/vault_pass.txt
+          echo "${{ secrets.VAULT_PASSWORD }}" > vault_pass.txt
 
       - name: Setup SSH
         run: |
